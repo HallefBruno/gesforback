@@ -49,7 +49,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             String msg = ((DataIntegrityViolationException) ex).getMostSpecificCause().getMessage();
             if (msg.contains("duplicate key")) {
                 errors.add("Esse registro já se encontra na base de dados");
-                apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), errors);
+                apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
                 return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
             }
         }
