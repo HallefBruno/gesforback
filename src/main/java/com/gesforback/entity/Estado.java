@@ -41,13 +41,13 @@ public class Estado implements Serializable {
     private String uf;
     
     @PrePersist
-    public void removeLastSpaceBlankPersist() {
+    private void removeLastSpaceBlankPersist() {
         this.nome = StringUtils.strip(this.nome);
         this.uf = StringUtils.strip(this.uf);
     }
     
     @PreUpdate
-    public void removeLastSpaceBlankUpdate() {
+    private void removeLastSpaceBlankUpdate() {
         this.nome = StringUtils.strip(this.nome);
         this.uf = StringUtils.strip(this.uf);
     }

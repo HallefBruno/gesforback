@@ -27,24 +27,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-//    @ExceptionHandler({ConstraintViolationException.class})
-//    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, WebRequest request) {
-//        List<String> errors = new ArrayList<>();
-//        ex.getConstraintViolations().forEach((violation) -> {
-//            errors.add(violation.getRootBeanClass().getName() + " " + violation.getPropertyPath() + ": " + violation.getMessage());
-//        });
-//        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-//        return new ResponseEntity<>( apiError, new HttpHeaders(), apiError.getStatus());
-//    }
-
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
         List<String> errors = new ArrayList<>();
         ApiError apiError;
+        
         if (ex instanceof NullPointerException) {
             errors.add("Ocorreu um erro no sistema!\nEntre em contato com o adminstrador.");
             apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), errors);
             return handleExceptionInternal(ex,apiError, new HttpHeaders(), apiError.getStatus(),request);
+            
         } else if (ex instanceof DataIntegrityViolationException) {
             String msg = ((DataIntegrityViolationException) ex).getMostSpecificCause().getMessage();
             if (msg.contains("duplicate key")) {
@@ -52,7 +44,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
                 return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
             }
+            
+        } else if(ex instanceof NotFoundRuntimeException) {
+            errors.add(ex.getLocalizedMessage());
+            apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), errors);
+            return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+            
+        } else if(ex instanceof NonNullRuntimeException) {
+            errors.add(ex.getLocalizedMessage());
+            apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
+            return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
         }
+        
         errors.add("Ocorreu um erro no sistema!\nEntre em contato com o adminstrador.");
         apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), errors);
         return handleExceptionInternal(ex,apiError, new HttpHeaders(), apiError.getStatus(),request);
@@ -149,55 +152,3 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         }
     }
 }
-
-//private class MessageErroDevUser {
-//
-//        private String messageDev;
-//        private String messageUser;
-//
-//        public MessageErroDevUser(String messageDev, String messageUser) {
-//            this.messageDev = messageDev;
-//            this.messageUser = messageUser;
-//        }
-//
-//        public String getMessageDev() {
-//            return messageDev;
-//        }
-//
-//        public void setMessageDev(String messageDev) {
-//            this.messageDev = messageDev;
-//        }
-//
-//        public String getMessageUser() {
-//            return messageUser;
-//        }
-//
-//        public void setMessageUser(String messageUser) {
-//            this.messageUser = messageUser;
-//        }
-//    }
-
-//@ExceptionHandler({Exception.class})
-//    public ResponseEntity<Object> handle(Exception ex, HttpServletRequest request, HttpServletResponse response, WebRequest webRequest) {
-//        String msgDev;
-//        String msgUser;
-//        if (ex instanceof NullPointerException) {
-//            return new ResponseEntity<>(new MessageErroDevUser(ex.getLocalizedMessage(), "Ocorreu um erro no sistema!\nEntre em contato com o adminstrador."), HttpStatus.BAD_REQUEST);
-//        } else if (ex instanceof DataIntegrityViolationException) {
-//            msgDev = ((DataIntegrityViolationException) ex).getMostSpecificCause().getMessage();
-//            msgUser = "Registro já se encontra na base de dados";
-//            if (msgDev.contains("duplicate key")) {
-//                return handleExceptionInternal(ex, new MessageErroDevUser(msgDev, msgUser), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
-//            }
-//            return handleExceptionInternal(ex, new MessageErroDevUser(ex.getLocalizedMessage(), ex.getLocalizedMessage()), new HttpHeaders(), HttpStatus.BAD_REQUEST, webRequest);
-//        }
-//        return new ResponseEntity<>(new MessageErroDevUser(ex.getLocalizedMessage(), "Ocorreu um erro no sistema!\nEntre em contato com o adminstrador."), HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
-//        Map<String, String> errors = new LinkedHashMap<>();
-//        ex.getBindingResult().getAllErrors().forEach((error) -> {
-//            String fieldName = ((FieldError) error).getField();
-//            String errorMessage = error.getDefaultMessage();
-//            errors.put(fieldName, errorMessage);
-//        });
-//        return handleExceptionInternal(ex, errors, new HttpHeaders(), status, request);
