@@ -2,14 +2,21 @@
 package com.gesforback.service;
 
 import com.gesforback.entity.Estado;
+import com.gesforback.entity.RequestParamPageable;
 import com.gesforback.exception.NotFoundRuntimeException;
 import com.gesforback.exception.NonNullRuntimeException;
 import com.gesforback.repository.EstadoRepository;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,6 +74,12 @@ public class EstadoService {
             return estado.orElseThrow(() -> new NotFoundRuntimeException("Nenhum estado encontrado!"));
         }
         throw new NonNullRuntimeException("Id não pode ser null");
+    }
+    
+    public Page<Estado> todos(RequestParamPageable requestParamPageable, String nome) {
+        Pageable paging = PageRequest.of(requestParamPageable.getCurrentPage(),requestParamPageable.getTotalItems(),Sort.by("nome").descending());
+        Page<Estado> pagedResult = estadoRepository.findByNomeContainingIgnoreCase(nome,paging);
+        return pagedResult;
     }
     
 }
