@@ -6,6 +6,7 @@ import com.gesforback.entity.RequestParamPageable;
 import com.gesforback.service.EstadoService;
 import com.google.gson.Gson;
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +42,10 @@ public class EstadoController {
     }
     
     @GetMapping(path = {"todos"})
-    public ResponseEntity<?> getAllEstados(@RequestParam(required = true) String requestParamPageable, @RequestParam(required = false) String nome) {
+    public ResponseEntity<?> getAllEstados(@RequestParam(required = true) String requestParamPageable, @RequestParam(required = true) String nome) {
         Gson g = new Gson();
         RequestParamPageable p = g.fromJson(requestParamPageable, RequestParamPageable.class);
-        Page<Estado> page = estadoService.todos(p, nome);
+        Page<Estado> page = estadoService.todos(p, Optional.ofNullable(nome).orElse(""));
         if(page.hasContent())
             return ResponseEntity.ok(page);
         return ResponseEntity.noContent().build();
