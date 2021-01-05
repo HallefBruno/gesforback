@@ -1,8 +1,8 @@
 
 package com.gesforback.service;
 
+import com.gesforback.entity.DataTable;
 import com.gesforback.entity.Estado;
-import com.gesforback.entity.RequestParamPageable;
 import com.gesforback.exception.NotFoundRuntimeException;
 import com.gesforback.exception.NonNullRuntimeException;
 import com.gesforback.repository.EstadoRepository;
@@ -74,10 +74,18 @@ public class EstadoService {
         throw new NonNullRuntimeException("Id não pode ser null");
     }
     
-    public Page<Estado> todos(RequestParamPageable requestParamPageable, String nome) {
-        Pageable paging = PageRequest.of(requestParamPageable.getCurrentPage(),requestParamPageable.getTotalItems(),Sort.by("nome").descending());
+    public DataTable todos(int draw, int start,int length, String nome) {
+        int page = start/length;
+        Pageable paging = PageRequest.of(page,length,Sort.by("nome").ascending());
         Page<Estado> pagedResult = estadoRepository.findByNomeContainingIgnoreCase(nome,paging);
-        return pagedResult;
+        DataTable dataPage = DataTable.builder()
+                .data(pagedResult.getContent())
+                .recordsTotal(pagedResult.getTotalElements())
+                .recordsFiltered(pagedResult.getTotalElements())
+                .draw(draw)
+                .start(start)
+                .build();
+        return dataPage;
     }
     
 }

@@ -1,16 +1,14 @@
 
 package com.gesforback.controller;
 
+import com.gesforback.entity.DataTable;
 import com.gesforback.entity.Estado;
-import com.gesforback.entity.RequestParamPageable;
 import com.gesforback.service.EstadoService;
-import com.google.gson.Gson;
 import java.net.URI;
-import java.util.Optional;
+import java.util.Arrays;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,18 +33,17 @@ public class EstadoController {
     
     @Autowired
     private EstadoService estadoService;
-    
+
     @GetMapping(path = {"buscar/{id}"})
     public ResponseEntity<Estado> getEstado(@PathVariable(required = true) UUID id) {
         return ResponseEntity.ok(estadoService.buscarPorId(id));
     }
     
     @GetMapping(path = {"todos"})
-    public ResponseEntity<?> getAllEstados(@RequestParam(required = true) String requestParamPageable, @RequestParam(required = true) String nome) {
-        Gson g = new Gson();
-        RequestParamPageable p = g.fromJson(requestParamPageable, RequestParamPageable.class);
-        Page<Estado> page = estadoService.todos(p, Optional.ofNullable(nome).orElse(""));
-        if(page.hasContent())
+    public ResponseEntity<?> getAllEstados(@RequestParam("draw") int draw, @RequestParam("start") int start, @RequestParam("length") int length, @RequestParam(name = "filtros", required = false) String[] filtros) {
+        boolean isPresent = Arrays.stream(filtros).findFirst().isPresent();
+        DataTable page = estadoService.todos(draw, start, length, isPresent ? filtros[0]:"");
+        if(page.getData().size() > 0)
             return ResponseEntity.ok(page);
         return ResponseEntity.noContent().build();
     }
@@ -76,3 +73,9 @@ public class EstadoController {
     }
     
 }
+
+
+        
+//        Gson g = new Gson();
+//        RequestParamPageable p = g.fromJson(requestParamPageable, RequestParamPageable.class);
+//        Optional<String[]> filters = Optional.ofNullable(filtros);
