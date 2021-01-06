@@ -6,6 +6,7 @@ import com.gesforback.entity.Estado;
 import com.gesforback.service.EstadoService;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +40,16 @@ public class EstadoController {
         return ResponseEntity.ok(estadoService.buscarPorId(id));
     }
     
-    @GetMapping(path = {"todos"})
-    public ResponseEntity<?> getAllEstados(@RequestParam("draw") int draw, @RequestParam("start") int start, @RequestParam("length") int length, @RequestParam(name = "filtros", required = false) String[] filtros) {
-        boolean isPresent = Arrays.stream(filtros).findFirst().isPresent();
-        DataTable page = estadoService.todos(draw, start, length, isPresent ? filtros[0]:"");
-        if(page.getData().size() > 0)
-            return ResponseEntity.ok(page);
-        return ResponseEntity.noContent().build();
+    @GetMapping(path = {"todos/{filtros}","todos/"})
+    public ResponseEntity<?> getAllEstados(
+        @PathVariable(required = false) String[] filtros,
+        @RequestParam("draw") int draw, 
+        @RequestParam("start") int start,  
+        @RequestParam("length") int length) 
+    {
+        Optional<String[]> op = Optional.ofNullable(filtros);
+        DataTable page = estadoService.todos(draw, start, length, op.isPresent() ? op.get()[0]:"");
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
     
     
