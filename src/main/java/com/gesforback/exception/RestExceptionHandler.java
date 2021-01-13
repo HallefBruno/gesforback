@@ -43,6 +43,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 errors.add("Esse registro já se encontra na base de dados");
                 apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
                 return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+            } else if (msg.contains("violates foreign key constraint")) {
+                errors.add("Não é possível excluir o atual registro");
+                apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
+                return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
             }
             
         } else if(ex instanceof NotFoundRuntimeException) {
@@ -51,6 +55,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
             
         } else if(ex instanceof NonNullRuntimeException) {
+            errors.add(ex.getLocalizedMessage());
+            apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
+            return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+            
+        } else if(ex instanceof NegocioException) {
             errors.add(ex.getLocalizedMessage());
             apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), errors);
             return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());

@@ -6,6 +6,7 @@ import com.gesforback.entity.Estado;
 import com.gesforback.exception.NotFoundRuntimeException;
 import com.gesforback.exception.NonNullRuntimeException;
 import com.gesforback.repository.EstadoRepository;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -86,6 +87,10 @@ public class EstadoService {
                 .start(start)
                 .build();
         return dataPage;
+    }
+    
+    public List<Estado> todos() {
+        return estadoRepository.findAll();
     }
     
 }

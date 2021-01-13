@@ -39,16 +39,19 @@ public class EstadoController {
         return ResponseEntity.ok(estadoService.buscarPorId(id));
     }
     
-    @GetMapping(path = {"todos/{filtros}","todos/"})
+    @GetMapping(path = {"todos/{filtros}","/todos"})
     public ResponseEntity<?> getAllEstados(
         @PathVariable(required = false) String[] filtros,
-        @RequestParam("draw") int draw, 
-        @RequestParam("start") int start,  
-        @RequestParam("length") int length) 
+        @RequestParam(name = "draw", required = false) Integer draw, 
+        @RequestParam(name = "start", required = false) Integer start,  
+        @RequestParam(name = "length", required = false) Integer length) 
     {
-        Optional<String[]> op = Optional.ofNullable(filtros);
-        DataTable page = estadoService.todos(draw, start, length, op.isPresent() ? op.get()[0]:"");
-        return new ResponseEntity<>(page, HttpStatus.OK);
+        if(draw!=null) {
+            Optional<String[]> op = Optional.ofNullable(filtros);
+            DataTable page = estadoService.todos(draw, start, length, op.isPresent() ? op.get()[0]:"");
+            return new ResponseEntity<>(page, HttpStatus.OK);
+        }
+        return ResponseEntity.ok(estadoService.todos());
     }
     
     
