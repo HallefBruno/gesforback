@@ -2,6 +2,7 @@
 package com.gesforback.service;
 
 import com.gesforback.entity.DataTable;
+import com.gesforback.entity.DataTableImpl;
 import com.gesforback.entity.Estado;
 import com.gesforback.exception.NotFoundRuntimeException;
 import com.gesforback.exception.NonNullRuntimeException;
@@ -76,17 +77,17 @@ public class EstadoService {
     }
     
     public DataTable todos(int draw, int start,int length, String nome) {
+
         int page = start/length;
         Pageable paging = PageRequest.of(page,length,Sort.by("nome").ascending());
         Page<Estado> pagedResult = estadoRepository.findByNomeContainingIgnoreCase(nome,paging);
-        DataTable dataPage = DataTable.builder()
-                .data(pagedResult.getContent())
-                .recordsTotal(pagedResult.getTotalElements())
-                .recordsFiltered(pagedResult.getTotalElements())
-                .draw(draw)
-                .start(start)
-                .build();
-        return dataPage;
+        DataTable<Estado> dataTable = new DataTableImpl<>();
+        dataTable.setData(pagedResult.getContent());
+        dataTable.setRecordsTotal(pagedResult.getTotalElements());
+        dataTable.setRecordsFiltered(pagedResult.getTotalElements());
+        dataTable.setDraw(draw);
+        dataTable.setStart(start);
+        return dataTable;
     }
     
     public List<Estado> todos() {
@@ -94,3 +95,12 @@ public class EstadoService {
     }
     
 }
+
+
+//        DataTable dataPage = DataTable.builder()
+//                .data(pagedResult.getContent())
+//                .recordsTotal(pagedResult.getTotalElements())
+//                .recordsFiltered(pagedResult.getTotalElements())
+//                .draw(draw)
+//                .start(start)
+//                .build();

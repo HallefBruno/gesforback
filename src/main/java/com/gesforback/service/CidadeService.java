@@ -3,23 +3,17 @@ package com.gesforback.service;
 
 import com.gesforback.entity.Cidade;
 import com.gesforback.entity.DataTable;
-import com.gesforback.entity.Estado;
 import com.gesforback.exception.NegocioException;
 import com.gesforback.exception.NonNullRuntimeException;
 import com.gesforback.exception.NotFoundRuntimeException;
 import com.gesforback.repository.CidadeRepository;
 import com.gesforback.repository.CidadeRepositoryCustom;
-import com.gesforback.repository.EstadoRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,18 +80,8 @@ public class CidadeService {
         throw new NonNullRuntimeException("Id não pode ser null");
     }
     
-    public DataTable todos(int draw, int start,int length, String nomeEstado, String nomeCidade) {
-        int page = start/length;
-        Pageable paging = PageRequest.of(page,length);
-        Page<Cidade> pagedResult = cidadeRepositoryCustom.findByCidade(nomeEstado, nomeCidade, paging);
-        DataTable dataPage = DataTable.builder()
-                .data(pagedResult.getContent())
-                .recordsTotal(pagedResult.getTotalElements())
-                .recordsFiltered(pagedResult.getTotalElements())
-                .draw(draw)
-                .start(start)
-                .build();
-        return dataPage;
+    public DataTable<Cidade> todos(String nomeEstado, String nomeCidade,int draw, int start,int length) {
+        return cidadeRepositoryCustom.findByCidade(nomeEstado, nomeCidade, draw, start, length);
     }
     
     public List<Cidade> todos() {

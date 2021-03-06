@@ -51,7 +51,7 @@ public class CidadeController {
         @RequestParam(required = false) String nomeCidade
     ){
         if(draw != null) {
-            DataTable page = cidadeService.todos(draw, start, length, nomeEstado,nomeCidade);
+            DataTable page = cidadeService.todos(nomeEstado, nomeCidade, draw, start, length);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }
         return ResponseEntity.ok(cidadeService.todos());

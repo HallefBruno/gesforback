@@ -1,8 +1,7 @@
 package com.gesforback.repository;
 
 import com.gesforback.entity.Cidade;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.gesforback.entity.DataTable;
 
 /**
  *
@@ -10,6 +9,6 @@ import org.springframework.data.domain.Pageable;
  */
 public interface CidadeRepositoryCustom {
     
-    Page<Cidade> findByCidade(String nomeCidade, String nomeEstado, Pageable pageable);
+    DataTable<Cidade> findByCidade(String nomeCidade, String nomeEstado, int draw, int start,int length);
     
 }
