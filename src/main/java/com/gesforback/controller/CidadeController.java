@@ -5,7 +5,6 @@ import com.gesforback.entity.Cidade;
 import com.gesforback.entity.DataTable;
 import com.gesforback.service.CidadeService;
 import java.net.URI;
-import java.util.Optional;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
