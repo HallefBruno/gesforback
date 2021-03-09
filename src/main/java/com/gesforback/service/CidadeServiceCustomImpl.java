@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * @author sud
  */
 @Component
-public class CidadeRepositoryCustomImpl implements CidadeRepositoryCustom {
+public class CidadeServiceCustomImpl implements CidadeRepositoryCustom {
 
     @PersistenceContext
     private EntityManager em;

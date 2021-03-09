@@ -15,7 +15,7 @@ import javax.persistence.criteria.Root;
  * @param <E>
  */
 
-public abstract class DataTable<E> {
+public class DataTable<E> {
     
     private int draw;
     private int start;

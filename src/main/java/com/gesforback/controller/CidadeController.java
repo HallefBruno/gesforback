@@ -53,7 +53,7 @@ public class CidadeController {
             DataTable page = cidadeService.todos(nomeEstado, nomeCidade, draw, start, length);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }
-        return ResponseEntity.ok(cidadeService.todos());
+        return ResponseEntity.ok(cidadeService.todas());
         
     }
     

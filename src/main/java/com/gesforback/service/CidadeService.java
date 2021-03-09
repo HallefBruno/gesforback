@@ -84,7 +84,7 @@ public class CidadeService {
         return cidadeRepositoryCustom.findByCidade(nomeEstado, nomeCidade, draw, start, length);
     }
     
-    public List<Cidade> todos() {
+    public List<Cidade> todas() {
         return cidadeRepository.findAll();
     }
 }
