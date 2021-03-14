@@ -1,5 +1,5 @@
 
-package com.gesforback.repository.querys;
+package com.gesforback.repository.querys.bairro;
 
 import com.gesforback.entity.Bairro;
 import com.gesforback.entity.Cidade;

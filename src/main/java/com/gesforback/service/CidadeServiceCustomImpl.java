@@ -2,7 +2,6 @@ package com.gesforback.service;
 
 import com.gesforback.entity.Cidade;
 import com.gesforback.entity.DataTable;
-import com.gesforback.entity.DataTableImpl;
 import com.gesforback.entity.Estado;
 import com.gesforback.repository.CidadeRepositoryCustom;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class CidadeServiceCustomImpl implements CidadeRepositoryCustom {
 
     @Override
     public DataTable<Cidade> findByCidade(String nomeEstado, String nomeCidade, int draw, int start,int length) {
-        DataTable<Cidade> dataTable = new DataTableImpl<>();
+        DataTable<Cidade> dataTable = new DataTable();
         
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Cidade> query = criteriaBuilder.createQuery(Cidade.class);

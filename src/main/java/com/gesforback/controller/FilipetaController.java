@@ -1,9 +1,10 @@
 
 package com.gesforback.controller;
 
-import com.gesforback.entity.Bairro;
+
 import com.gesforback.entity.DataTable;
-import com.gesforback.service.BairroService;
+import com.gesforback.entity.Filipeta;
+import com.gesforback.service.FilipetaService;
 import java.net.URI;
 import java.util.UUID;
 import javax.validation.Valid;
@@ -23,51 +24,51 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
-@RequestMapping(path = {"bairros"})
-public class BairroController {
+@RequestMapping(path = {"filipetas"})
+public class FilipetaController {
     
     @Autowired
-    private BairroService bairroService;
+    private FilipetaService filipetaService;
     
     @PostMapping(path = {"salvar"})
-    public ResponseEntity<?> salvar(@Valid @RequestBody Bairro bairro) {
-        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/bairros/buscar/{id}").buildAndExpand(bairroService.salvar(bairro).getId()).toUri();
+    public ResponseEntity<?> salvar(@Valid @RequestBody Filipeta filipeta) {
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/filipetas/buscar/{id}").buildAndExpand(filipetaService.salvar(filipeta).getId()).toUri();
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uri);
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
     
     @GetMapping(path = {"todos"})
-    public ResponseEntity<?> getAllBairros(
+    public ResponseEntity<?> filtrar(
         @RequestParam(name = "draw", required = false) Integer draw, 
         @RequestParam(name = "start", required = false) Integer start,  
         @RequestParam(name = "length", required = false) Integer length,
-        @RequestParam(required = false) String nomeBairro,
-        @RequestParam(required = false) String nomeCidade
+        @RequestParam(required = false) String numero,
+        @RequestParam(required = false) String nomePortaria
     ){
         if(draw != null) {
-            DataTable page = bairroService.todos(nomeBairro, nomeCidade, draw, start, length);
+            DataTable page = filipetaService.todos(numero, nomePortaria, draw, start, length);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }
-        return ResponseEntity.ok(bairroService.todos());
+        return ResponseEntity.ok(filipetaService.todos());
         
     }
     
     @PutMapping(path = {"alterar/{id}"})
-    public ResponseEntity<Bairro> alterar(@Valid @RequestBody Bairro bairro, @PathVariable(required = true) UUID id) { 
-        Bairro bairroUpdate = bairroService.update(bairro, id);
-        return ResponseEntity.ok(bairroUpdate);
+    public ResponseEntity<Filipeta> alterar(@Valid @RequestBody Filipeta filipeta, @PathVariable(required = true) UUID id) { 
+        Filipeta filipeUpdate = filipetaService.update(filipeta, id);
+        return ResponseEntity.ok(filipeUpdate);
     }
     
     @DeleteMapping(path = {"excluir/{id}"})
     public ResponseEntity<?> deletar(@PathVariable(required = true) UUID id) {
-        bairroService.deletar(id);
+        filipetaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping(path = {"buscar/{id}"})
-    public ResponseEntity<Bairro> getBairro(@PathVariable(required = true) UUID id) {
-        return ResponseEntity.ok(bairroService.buscarPorId(id));
+    public ResponseEntity<Filipeta> buscarPorId(@PathVariable(required = true) UUID id) {
+        return ResponseEntity.ok(filipetaService.buscarPorId(id));
     }
     
 }

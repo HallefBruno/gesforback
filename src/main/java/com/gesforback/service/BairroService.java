@@ -73,8 +73,8 @@ public class BairroService {
         throw new NonNullRuntimeException("Id não pode ser null");
     }
     
-    public DataTable<Bairro> todos(String nomeEstado, String nomeCidade,int draw, int start,int length) {
-        return bairroRepository.filtrar(nomeEstado, nomeCidade, draw, start, length);
+    public DataTable<Bairro> todos(String nomeBairro, String nomeCidade,int draw, int start,int length) {
+        return bairroRepository.filtrar(nomeBairro, nomeCidade, draw, start, length);
     }
     
     public List<Bairro> todos() {

@@ -2,7 +2,7 @@ package com.gesforback.repository;
 
 import com.gesforback.entity.Bairro;
 import com.gesforback.entity.Cidade;
-import com.gesforback.repository.querys.BairroRepositoryCustom;
+import com.gesforback.repository.querys.bairro.BairroRepositoryCustom;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,8 +2,8 @@
 package com.gesforback.service;
 
 import com.gesforback.entity.DataTable;
-import com.gesforback.entity.DataTableImpl;
 import com.gesforback.entity.Estado;
+import com.gesforback.exception.NegocioException;
 import com.gesforback.exception.NotFoundRuntimeException;
 import com.gesforback.exception.NonNullRuntimeException;
 import com.gesforback.repository.EstadoRepository;
@@ -32,6 +32,11 @@ public class EstadoService {
     
     @Transactional
     public Estado salvar(Estado estado) {
+        
+        Optional<Estado> estadoCadastrado = estadoRepository.findByNomeContainingIgnoreCase(estado.getNome());
+        if(estadoCadastrado.isPresent()) {
+            throw new NegocioException("Esse estado já está cadastrada!");
+        }
         estado.setId(UUID.randomUUID());
         Estado novoEstado = estadoRepository.save(estado);
         return novoEstado;
@@ -81,7 +86,7 @@ public class EstadoService {
         int page = start/length;
         Pageable paging = PageRequest.of(page,length,Sort.by("nome").ascending());
         Page<Estado> pagedResult = estadoRepository.findByNomeContainingIgnoreCase(nome,paging);
-        DataTable<Estado> dataTable = new DataTableImpl<>();
+        DataTable<Estado> dataTable = new DataTable<>();
         dataTable.setData(pagedResult.getContent());
         dataTable.setRecordsTotal(pagedResult.getTotalElements());
         dataTable.setRecordsFiltered(pagedResult.getTotalElements());
