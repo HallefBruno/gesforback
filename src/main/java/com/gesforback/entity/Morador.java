@@ -98,10 +98,10 @@ public class Morador implements Serializable {
     @Column(nullable = false, name = "animal_domestico")
     private Boolean animalDomestico;
     
-    @OneToMany(mappedBy = "morador", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Telefone> telefones;
     
-    @OneToMany(mappedBy = "morador", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Automovel> automoveis;
 
     @PrePersist
