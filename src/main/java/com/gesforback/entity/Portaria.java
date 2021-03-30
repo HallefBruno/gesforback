@@ -1,3 +1,4 @@
+
 package com.gesforback.entity;
 
 import java.io.Serializable;
@@ -14,13 +15,9 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- *
- * @author sud
- */
 @Entity
 @Data
-public class Estado implements Serializable {
+public class Portaria implements Serializable {
     
     @Id
     private UUID id;
@@ -32,24 +29,14 @@ public class Estado implements Serializable {
     @NotNull(message = "Nome não pode ser null!")
     private String nome;
     
-    
-    @Column(length = 2, nullable = false, unique = true)
-    @Size(max = 2, min = 2, message = "Quantidade máxima de caracter 2 e minimo 2")
-    @NotBlank(message = "UF não pode ser espaços em branco!")
-    @NotEmpty(message = "UF não pode ser vazio!")
-    @NotNull(message = "UF não pode ser null!")
-    private String uf;
-    
     @PrePersist
     private void removeLastSpaceBlankPersist() {
         this.nome = StringUtils.strip(this.nome);
-        this.uf = StringUtils.strip(this.uf);
     }
     
     @PreUpdate
     private void removeLastSpaceBlankUpdate() {
         this.nome = StringUtils.strip(this.nome);
-        this.uf = StringUtils.strip(this.uf);
     }
     
 }

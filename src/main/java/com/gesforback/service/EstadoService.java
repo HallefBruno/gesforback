@@ -1,11 +1,13 @@
 
 package com.gesforback.service;
 
+import com.gesforback.entity.DataTable;
 import com.gesforback.entity.Estado;
-import com.gesforback.entity.RequestParamPageable;
+import com.gesforback.exception.NegocioException;
 import com.gesforback.exception.NotFoundRuntimeException;
 import com.gesforback.exception.NonNullRuntimeException;
 import com.gesforback.repository.EstadoRepository;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,6 +32,11 @@ public class EstadoService {
     
     @Transactional
     public Estado salvar(Estado estado) {
+        
+        Optional<Estado> estadoCadastrado = estadoRepository.findByNomeContainingIgnoreCase(estado.getNome());
+        if(estadoCadastrado.isPresent()) {
+            throw new NegocioException("Esse estado já está cadastrada!");
+        }
         estado.setId(UUID.randomUUID());
         Estado novoEstado = estadoRepository.save(estado);
         return novoEstado;
@@ -74,10 +81,31 @@ public class EstadoService {
         throw new NonNullRuntimeException("Id não pode ser null");
     }
     
-    public Page<Estado> todos(RequestParamPageable requestParamPageable, String nome) {
-        Pageable paging = PageRequest.of(requestParamPageable.getCurrentPage(),requestParamPageable.getTotalItems(),Sort.by("nome").descending());
+    public DataTable todos(int draw, int start,int length, String nome) {
+
+        int page = start/length;
+        Pageable paging = PageRequest.of(page,length,Sort.by("nome").ascending());
         Page<Estado> pagedResult = estadoRepository.findByNomeContainingIgnoreCase(nome,paging);
-        return pagedResult;
+        DataTable<Estado> dataTable = new DataTable<>();
+        dataTable.setData(pagedResult.getContent());
+        dataTable.setRecordsTotal(pagedResult.getTotalElements());
+        dataTable.setRecordsFiltered(pagedResult.getTotalElements());
+        dataTable.setDraw(draw);
+        dataTable.setStart(start);
+        return dataTable;
+    }
+    
+    public List<Estado> todos() {
+        return estadoRepository.findAll();
     }
     
 }
+
+
+//        DataTable dataPage = DataTable.builder()
+//                .data(pagedResult.getContent())
+//                .recordsTotal(pagedResult.getTotalElements())
+//                .recordsFiltered(pagedResult.getTotalElements())
+//                .draw(draw)
+//                .start(start)
+//                .build();
