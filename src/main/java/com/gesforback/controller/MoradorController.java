@@ -4,9 +4,11 @@ package com.gesforback.controller;
 import com.gesforback.entity.EstadoCivil;
 import com.gesforback.entity.Fabricante;
 import com.gesforback.entity.TipoResidencia;
+import com.gesforback.entity.dto.AutomovelDTO;
 import com.gesforback.entity.dto.FabricanteDTO;
 import com.gesforback.entity.dto.SexoDTO;
 import com.gesforback.entity.dto.TipoResidenciaDTO;
+import com.gesforback.service.AutomovelService;
 import com.gesforback.service.FabricanteService;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,6 +26,8 @@ public class MoradorController {
     
     @Autowired
     private FabricanteService fabricanteService;
+    @Autowired
+    private AutomovelService automovelService;
     
     @GetMapping("estado-civil")
     public ResponseEntity<List<SexoDTO>> estadosCivil() {
@@ -50,5 +55,15 @@ public class MoradorController {
         });
         return fabricantes;
     }
+    
+    @GetMapping("automoveis")
+    public ResponseEntity<?> automoveis(
+            @RequestParam(name = "q", required = false) String automovel,
+            @RequestParam(name = "page",defaultValue = "0", required = false) String page,
+            @RequestParam(name = "fabricanteId", required = true) String fabricanteId) {
+        return new ResponseEntity<>(automovelService.automoveis(automovel,fabricanteId, page),HttpStatus.OK);
+    }
+    
+    
     
 }
