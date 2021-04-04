@@ -2,7 +2,6 @@
 package com.gesforback.entity;
 
 import java.io.Serializable;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,11 +21,11 @@ import org.apache.commons.lang3.StringUtils;
 public class Automovel implements Serializable {
     
     @Id
-    private UUID id;
+    private Long id;
     
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     @Size(max = 100, min = 3, message = "Quantidade máxima de caracter 12 e minimo 10")
-    @NotBlank(message = "Nome não pode ser espaços em branco!")
+    @NotBlank(message = "Nome não pode ter espaços em branco!")
     @NotEmpty(message = "Nome não pode ser vazio!")
     @NotNull(message = "Nome não pode ser null!")
     private String nome;
@@ -35,6 +34,13 @@ public class Automovel implements Serializable {
     @JoinColumn
     @ManyToOne
     private Fabricante fabricante;
+    
+    @Column(length = 100, nullable = false, name = "tipo_automovel")
+    @Size(max = 100, min = 3, message = "Quantidade máxima de caracter 12 e minimo 10")
+    @NotBlank(message = "Tipo automóvel não pode ter espaços em branco!")
+    @NotEmpty(message = "Tipo automóvel não pode ser vazio!")
+    @NotNull(message = "Tipo automóvel não pode ser null!")
+    private String tipoAutomovel;
     
     @PrePersist
     private void removeLastSpaceBlankPersist() {

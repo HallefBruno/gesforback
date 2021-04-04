@@ -2,7 +2,6 @@
 package com.gesforback.entity;
 
 import java.io.Serializable;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 public class Fabricante implements Serializable {
     
     @Id
-    private UUID id;
+    private Long id;
     
     @Column(length = 100, nullable = false, unique = true)
     @Size(max = 100, min = 3, message = "Quantidade máxima de caracter 12 e minimo 10")

@@ -69,9 +69,9 @@ public class Morador implements Serializable {
     private String naturalidade;
     
     @Size(max = 20, message = "Quantidade máxima de caracter 20")
-    @NotBlank(message = "Estado civil emissor não pode ter espaços em branco!")
-    @NotEmpty(message = "Estado civil emissor não pode ser vazio!")
-    @NotNull(message = "Estado civil emissor não pode ser null!")
+    @NotBlank(message = "Estado civil não pode ter espaços em branco!")
+    @NotEmpty(message = "Estado civil não pode ser vazio!")
+    @NotNull(message = "Estado civil não pode ser null!")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20, name = "estado_civil")
     private EstadoCivil estadoCivil;
@@ -97,6 +97,14 @@ public class Morador implements Serializable {
     @NotNull(message = "Animal domestico não pode ser null!")
     @Column(nullable = false, name = "animal_domestico")
     private Boolean animalDomestico;
+    
+    @Size(max = 40, message = "Quantidade máxima de caracter 40")
+    @NotBlank(message = "Tipo moradia emissor não pode ter espaços em branco!")
+    @NotEmpty(message = "Tipo moradia não pode ser vazio!")
+    @NotNull(message = "Tipo moradial não pode ser null!")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 40, name = "tipo_moradia")
+    private TipoResidencia tipoMoradia;
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Telefone> telefones;

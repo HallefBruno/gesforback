@@ -1,17 +1,17 @@
 
-package com.gesforback.entity;
+package com.gesforback.entity.dto;
 
 import lombok.Data;
 
 @Data
-public class SexoDTO {
+public class TipoResidenciaDTO {
     
     private String id;
     private String text;
 
-    public SexoDTO(String id,String text) {
+    public TipoResidenciaDTO(String id,String text) {
         this.id = id;
         this.text = text;
     }
-
+    
 }
