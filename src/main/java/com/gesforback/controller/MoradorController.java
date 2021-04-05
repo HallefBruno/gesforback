@@ -2,9 +2,7 @@
 package com.gesforback.controller;
 
 import com.gesforback.entity.EstadoCivil;
-import com.gesforback.entity.Fabricante;
 import com.gesforback.entity.TipoResidencia;
-import com.gesforback.entity.dto.AutomovelDTO;
 import com.gesforback.entity.dto.FabricanteDTO;
 import com.gesforback.entity.dto.SexoDTO;
 import com.gesforback.entity.dto.TipoResidenciaDTO;
