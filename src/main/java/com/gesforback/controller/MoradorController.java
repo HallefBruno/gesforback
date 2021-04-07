@@ -2,21 +2,29 @@
 package com.gesforback.controller;
 
 import com.gesforback.entity.EstadoCivil;
+import com.gesforback.entity.Morador;
 import com.gesforback.entity.TipoResidencia;
 import com.gesforback.entity.dto.FabricanteDTO;
 import com.gesforback.entity.dto.SexoDTO;
 import com.gesforback.entity.dto.TipoResidenciaDTO;
 import com.gesforback.service.AutomovelService;
 import com.gesforback.service.FabricanteService;
+import com.gesforback.service.MoradorService;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping(path = {"morador"})
@@ -26,6 +34,16 @@ public class MoradorController {
     private FabricanteService fabricanteService;
     @Autowired
     private AutomovelService automovelService;
+    @Autowired
+    private MoradorService moradorService;
+    
+    @PostMapping(path = {"salvar"})
+    public ResponseEntity<?> salvar(@Valid @RequestBody Morador morador) {
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/morador/buscar/{id}").buildAndExpand(moradorService.salvar(morador).getId()).toUri();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(uri);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
     
     @GetMapping("estado-civil")
     public ResponseEntity<List<SexoDTO>> estadosCivil() {
