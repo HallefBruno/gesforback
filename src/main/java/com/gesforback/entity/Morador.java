@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -67,11 +68,7 @@ public class Morador implements Serializable {
     @NotNull(message = "Naturalidade não pode ser null!")
     @Column(length = 100, nullable = false)
     private String naturalidade;
-    
-    @Size(max = 20, message = "Quantidade máxima de caracter 20")
-    @NotBlank(message = "Estado civil não pode ter espaços em branco!")
-    @NotEmpty(message = "Estado civil não pode ser vazio!")
-    @NotNull(message = "Estado civil não pode ser null!")
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20, name = "estado_civil")
     private EstadoCivil estadoCivil;
@@ -97,20 +94,16 @@ public class Morador implements Serializable {
     @NotNull(message = "Animal domestico não pode ser null!")
     @Column(nullable = false, name = "animal_domestico")
     private Boolean animalDomestico;
-    
-    @Size(max = 40, message = "Quantidade máxima de caracter 40")
-    @NotBlank(message = "Tipo moradia emissor não pode ter espaços em branco!")
-    @NotEmpty(message = "Tipo moradia não pode ser vazio!")
-    @NotNull(message = "Tipo moradial não pode ser null!")
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 40, name = "tipo_moradia")
     private TipoResidencia tipoMoradia;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "morador", orphanRemoval = true)
     private List<Telefone> telefones;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Automovel> automoveis;
+    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<Automovel> automoveis;
 
     @PrePersist
     private void removeLastSpaceBlankPersist() {

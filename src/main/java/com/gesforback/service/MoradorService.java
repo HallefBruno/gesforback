@@ -23,6 +23,8 @@ public class MoradorService {
             throw new NegocioException("Essa filipe já foi cadastrada");
         });
         morador.setId(UUID.randomUUID());
+        //System.out.println(UUID.randomUUID());
+        //morador.getTelefones().forEach(telefone -> telefone.setId(UUID.randomUUID()));
         Morador nova = moradorRepository.save(morador);
         return nova;
     }

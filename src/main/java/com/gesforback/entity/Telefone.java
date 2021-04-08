@@ -5,7 +5,10 @@ import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotBlank;
@@ -28,6 +31,10 @@ public class Telefone implements Serializable {
     @NotEmpty(message = "Número não pode ser vazio!")
     @NotNull(message = "Número não pode ser null!")
     private String numero;
+    
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="morador_id")
+    Morador morador;
     
     @PrePersist
     private void removeLastSpaceBlankPersist() {
