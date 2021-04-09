@@ -1,6 +1,8 @@
 
 package com.gesforback.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -99,10 +102,11 @@ public class Morador implements Serializable {
     @Column(nullable = false, length = 40, name = "tipo_moradia")
     private TipoResidencia tipoMoradia;
     
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "morador", orphanRemoval = true)
+    @OneToMany(mappedBy = "morador")
     private List<Telefone> telefones;
     
     //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    //@JoinTable(name = "automoveis_morador", joinColumns = @JoinColumn(name = "morador_id"), inverseJoinColumns = @JoinColumn(name = "automovel_id"))
     //private List<Automovel> automoveis;
 
     @PrePersist

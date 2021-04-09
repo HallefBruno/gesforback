@@ -1,6 +1,9 @@
 
 package com.gesforback.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -33,7 +36,8 @@ public class Telefone implements Serializable {
     private String numero;
     
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="morador_id")
+    @JoinColumn(name="morador_id") 
+    @JsonIgnore
     Morador morador;
     
     @PrePersist
