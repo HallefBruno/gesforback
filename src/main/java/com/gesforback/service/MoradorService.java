@@ -17,7 +17,7 @@ public class MoradorService {
     
     @Transactional
     public Morador salvar(Morador morador) {
-        Optional<Morador> moradorCadastrado = moradorRepository.findByCpf(morador.getCpf());
+        Optional<Morador> moradorCadastrado = moradorRepository.findByCpfOrResidencia(morador.getCpf(), morador.getResidencia());
         moradorCadastrado.ifPresent((f) -> {
             throw new NegocioException("Esse morador já foi cadastrada");
         });

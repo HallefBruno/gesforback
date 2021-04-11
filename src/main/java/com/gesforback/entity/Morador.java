@@ -18,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
@@ -36,28 +38,28 @@ public class Morador implements Serializable {
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     private UUID id;
     
-    @Size(max = 100, min = 3, message = "Quantidade máxima de caracter 12 e minimo 10")
+    //@Size(max = 100, min = 3, message = "Quantidade máxima de caracter 12 e minimo 10")
     @NotBlank(message = "Nome não pode ter espaços em branco!")
     @NotEmpty(message = "Nome não pode ser vazio!")
     @NotNull(message = "Nome não pode ser null!")
     @Column(length = 100, nullable = false)
     private String nome;
     
-    @Size(max = 11, min = 11, message = "Quantidade máxima de caracter 11")
+    //@Size(max = 14, min = 14, message = "Quantidade máxima de caracter 11")
     @NotBlank(message = "CPF não pode ter espaços em branco!")
     @NotEmpty(message = "CPF não pode ser vazio!")
     @NotNull(message = "CPF não pode ser null!")
     @Column(unique = true, length = 11, nullable = false)
     private String cpf;
     
-    @Size(max = 11, message = "Quantidade máxima de caracter 11")
+    //@Size(max = 11, message = "Quantidade máxima de caracter 11")
     @NotBlank(message = "RG não pode ter espaços em branco!")
     @NotEmpty(message = "RG não pode ser vazio!")
     @NotNull(message = "RG não pode ser null!")
     @Column(unique = true, length = 11,nullable = false)
     private String rg;
     
-    @Size(max = 11, min = 3, message = "Quantidade máxima de caracter 11 e minimo 3")
+    //@Size(max = 11, min = 3, message = "Quantidade máxima de caracter 11 e minimo 3")
     @NotBlank(message = "Orgão emissor não pode ter espaços em branco!")
     @NotEmpty(message = "Orgão emissor não pode ser vazio!")
     @NotNull(message = "Orgão emissor não pode ser null!")
@@ -68,7 +70,7 @@ public class Morador implements Serializable {
     @Column(name = "data_nascimento", nullable = false)
     Date dataNascimento;
     
-    @Size(max = 100, min = 3, message = "Quantidade máxima de caracter 100 e minimo 3")
+    //@Size(max = 100, min = 3, message = "Quantidade máxima de caracter 100 e minimo 3")
     @NotBlank(message = "Naturalidade não pode ter espaços em branco!")
     @NotEmpty(message = "Naturalidade não pode ser vazio!")
     @NotNull(message = "Naturalidade não pode ser null!")
@@ -79,14 +81,14 @@ public class Morador implements Serializable {
     @Column(nullable = false, length = 20, name = "estado_civil")
     private EstadoCivil estadoCivil;
     
-    @Size(max = 20, message = "Quantidade máxima de caracter 20")
+    //@Size(max = 20, message = "Quantidade máxima de caracter 20")
     @NotBlank(message = "Sexo não pode ter espaços em branco!")
     @NotEmpty(message = "Sexo não pode ser vazio!")
     @NotNull(message = "Sexo não pode ser null!")
     @Column(nullable = false, length = 20)
     private String sexo;
     
-    @Size(max = 255, message = "Quantidade máxima de caracter 255")
+    //@Size(max = 255, message = "Quantidade máxima de caracter 255")
     @NotBlank(message = "Residência não pode ter espaços em branco!")
     @NotEmpty(message = "Residência não pode ser vazio!")
     @NotNull(message = "Residência não pode ser null!")
@@ -116,35 +118,23 @@ public class Morador implements Serializable {
     private List<Automovel> automoveis;
 
     @PrePersist
+    @PreUpdate
+    @PostPersist
+    @PostUpdate
     private void removeLastSpaceBlankPersist() {
         this.nome = StringUtils.strip(this.nome);
         this.cpf = StringUtils.strip(this.cpf);
+        this.cpf = this.cpf.replaceAll("[^\\w\\s]", "");
         this.rg = StringUtils.strip(this.rg);
         this.orgaoEmissor = StringUtils.strip(this.orgaoEmissor);
         this.naturalidade = StringUtils.strip(this.naturalidade);
         this.sexo = StringUtils.strip(this.sexo);
         this.residencia = StringUtils.strip(this.residencia);
     }
-    
-    @PreUpdate
-    private void removeLastSpaceBlankUpdate() {
-        this.nome = StringUtils.strip(this.nome);
-        this.cpf = StringUtils.strip(this.cpf);
-        this.rg = StringUtils.strip(this.rg);
-        this.orgaoEmissor = StringUtils.strip(this.orgaoEmissor);
-        this.naturalidade = StringUtils.strip(this.naturalidade);
-        this.sexo = StringUtils.strip(this.sexo);
-        this.residencia = StringUtils.strip(this.residencia);
-    }
-    
-    
-    
+
     //@NumberFormat(style = Style.CURRENCY, pattern = "###,##0.00")
     //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss", iso = ISO.DATE_TIME)
-    
-//    @JsonIdentityInfo(
-//  generator = ObjectIdGenerators.PropertyGenerator.class, 
-//  property = "id")
+
 
     public UUID getId() {
         return id;

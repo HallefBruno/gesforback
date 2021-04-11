@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotBlank;
@@ -30,7 +32,7 @@ public class Telefone implements Serializable {
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     private UUID id;
     
-    @Size(max = 11, min = 11, message = "Quantidade máxima de caracter 12 e minimo 10")
+    //@Size(max = 16, min = 10, message = "Quantidade máxima de caracter 16 e minimo 10")
     @NotBlank(message = "Número não pode ser espaços em branco!")
     @NotEmpty(message = "Número não pode ser vazio!")
     @NotNull(message = "Número não pode ser null!")
@@ -43,13 +45,12 @@ public class Telefone implements Serializable {
     private Morador morador;
     
     @PrePersist
+    @PreUpdate
+    @PostPersist
+    @PostUpdate
     private void removeLastSpaceBlankPersist() {
         this.numero = StringUtils.strip(this.numero);
-    }
-    
-    @PreUpdate
-    private void removeLastSpaceBlankUpdate() {
-        this.numero = StringUtils.strip(this.numero);
+        this.numero = this.numero.replaceAll("[^A-Za-z0-9]","").trim();
     }
 
     public UUID getId() {
