@@ -1,9 +1,7 @@
 
 package com.gesforback.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -32,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
 public class Morador implements Serializable {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, unique = true, nullable = false)
     private UUID id;
     
     @Size(max = 100, min = 3, message = "Quantidade máxima de caracter 12 e minimo 10")
@@ -103,7 +105,7 @@ public class Morador implements Serializable {
     @Column(nullable = false, length = 40, name = "tipo_moradia")
     private TipoResidencia tipoMoradia;
 
-    @OneToMany(mappedBy = "morador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Telefone> telefones;
     

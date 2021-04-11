@@ -8,6 +8,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,23 +21,26 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 
+
 @Entity
 public class Telefone implements Serializable {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, unique = true, nullable = false)
     private UUID id;
     
-    @Column(length = 100, nullable = false, unique = true)
-    @Size(max = 12, min = 10, message = "Quantidade máxima de caracter 12 e minimo 10")
+    @Size(max = 11, min = 11, message = "Quantidade máxima de caracter 12 e minimo 10")
     @NotBlank(message = "Número não pode ser espaços em branco!")
     @NotEmpty(message = "Número não pode ser vazio!")
     @NotNull(message = "Número não pode ser null!")
+    @Column(length = 11, nullable = false, unique = true)
     private String numero;
     
     @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="morador_id") 
     @JsonBackReference
-    Morador morador;
+    private Morador morador;
     
     @PrePersist
     private void removeLastSpaceBlankPersist() {
