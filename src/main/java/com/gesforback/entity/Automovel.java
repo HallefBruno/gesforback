@@ -31,8 +31,8 @@ public class Automovel implements Serializable {
     private String nome;
     
     
-    @JoinColumn
     @ManyToOne
+    @JoinColumn(name = "fabricante_id")
     private Fabricante fabricante;
     
     @Column(length = 100, nullable = false, name = "tipo_automovel")

@@ -1,8 +1,9 @@
 
 package com.gesforback.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -24,10 +26,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-@Entity @Data
+@Entity
 public class Morador implements Serializable {
     
     @Id
@@ -37,7 +38,7 @@ public class Morador implements Serializable {
     @NotBlank(message = "Nome não pode ter espaços em branco!")
     @NotEmpty(message = "Nome não pode ser vazio!")
     @NotNull(message = "Nome não pode ser null!")
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     private String nome;
     
     @Size(max = 11, min = 11, message = "Quantidade máxima de caracter 11")
@@ -101,13 +102,16 @@ public class Morador implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 40, name = "tipo_moradia")
     private TipoResidencia tipoMoradia;
-    
-    @OneToMany(mappedBy = "morador")
+
+    @OneToMany(mappedBy = "morador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Telefone> telefones;
     
-    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JoinTable(name = "automoveis_morador", joinColumns = @JoinColumn(name = "morador_id"), inverseJoinColumns = @JoinColumn(name = "automovel_id"))
-    //private List<Automovel> automoveis;
+    @OneToMany(cascade = CascadeType.REFRESH, orphanRemoval = true)
+    @JoinTable(name = "automoveis_morador", 
+            joinColumns = @JoinColumn(name = "morador_id"), 
+            inverseJoinColumns = @JoinColumn(name = "automovel_id"))
+    private List<Automovel> automoveis;
 
     @PrePersist
     private void removeLastSpaceBlankPersist() {
@@ -131,4 +135,132 @@ public class Morador implements Serializable {
         this.residencia = StringUtils.strip(this.residencia);
     }
     
+    
+    
+    //@NumberFormat(style = Style.CURRENCY, pattern = "###,##0.00")
+    //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss", iso = ISO.DATE_TIME)
+    
+//    @JsonIdentityInfo(
+//  generator = ObjectIdGenerators.PropertyGenerator.class, 
+//  property = "id")
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public String getOrgaoEmissor() {
+        return orgaoEmissor;
+    }
+
+    public void setOrgaoEmissor(String orgaoEmissor) {
+        this.orgaoEmissor = orgaoEmissor;
+    }
+
+    public Date getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public String getNaturalidade() {
+        return naturalidade;
+    }
+
+    public void setNaturalidade(String naturalidade) {
+        this.naturalidade = naturalidade;
+    }
+
+    public EstadoCivil getEstadoCivil() {
+        return estadoCivil;
+    }
+
+    public void setEstadoCivil(EstadoCivil estadoCivil) {
+        this.estadoCivil = estadoCivil;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    public String getResidencia() {
+        return residencia;
+    }
+
+    public void setResidencia(String residencia) {
+        this.residencia = residencia;
+    }
+
+    public Integer getQdtMoradores() {
+        return qdtMoradores;
+    }
+
+    public void setQdtMoradores(Integer qdtMoradores) {
+        this.qdtMoradores = qdtMoradores;
+    }
+
+    public Boolean getAnimalDomestico() {
+        return animalDomestico;
+    }
+
+    public void setAnimalDomestico(Boolean animalDomestico) {
+        this.animalDomestico = animalDomestico;
+    }
+
+    public TipoResidencia getTipoMoradia() {
+        return tipoMoradia;
+    }
+
+    public void setTipoMoradia(TipoResidencia tipoMoradia) {
+        this.tipoMoradia = tipoMoradia;
+    }
+
+    public List<Telefone> getTelefones() {
+        return telefones;
+    }
+
+    public void setTelefones(List<Telefone> telefones) {
+        this.telefones = telefones;
+    }
+
+    public List<Automovel> getAutomoveis() {
+        return automoveis;
+    }
+
+    public void setAutomoveis(List<Automovel> automoveis) {
+        this.automoveis = automoveis;
+    }
 }

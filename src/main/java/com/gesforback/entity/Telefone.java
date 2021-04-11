@@ -2,10 +2,9 @@
 package com.gesforback.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,11 +17,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
-@Data
 public class Telefone implements Serializable {
     
     @Id
@@ -35,9 +32,9 @@ public class Telefone implements Serializable {
     @NotNull(message = "Número não pode ser null!")
     private String numero;
     
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name="morador_id") 
-    @JsonIgnore
+    @JsonBackReference
     Morador morador;
     
     @PrePersist
@@ -49,4 +46,30 @@ public class Telefone implements Serializable {
     private void removeLastSpaceBlankUpdate() {
         this.numero = StringUtils.strip(this.numero);
     }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public Morador getMorador() {
+        return morador;
+    }
+
+    public void setMorador(Morador morador) {
+        this.morador = morador;
+    }
+    
+    
 }
