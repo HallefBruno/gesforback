@@ -19,7 +19,7 @@ public class MoradorService {
     public Morador salvar(Morador morador) {
         Optional<Morador> moradorCadastrado = moradorRepository.findByCpfOrResidencia(morador.getCpf(), morador.getResidencia());
         moradorCadastrado.ifPresent((f) -> {
-            throw new NegocioException("Esse morador já foi cadastrada");
+            throw new NegocioException("Esse morador já foi cadastrada "+f.getCpf());
         });
         Morador novoMorador = moradorRepository.save(morador);
         return novoMorador;
