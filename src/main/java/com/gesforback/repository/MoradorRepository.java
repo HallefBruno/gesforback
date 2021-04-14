@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MoradorRepository extends JpaRepository<Morador, UUID>{
-    Optional<Morador> findByCpfOrResidencia(String cpf, String residencia);
+    Optional<Morador> findByCpfOrRgOrResidencia(String cpf,String rg, String residencia);
 }
