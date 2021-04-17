@@ -1,10 +1,12 @@
 
 package com.gesforback.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,10 +14,12 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -31,6 +35,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
+//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Morador implements Serializable {
     
     @Id
@@ -109,13 +114,30 @@ public class Morador implements Serializable {
 
     @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Telefone> telefones;
+    private Set<Telefone> telefones;
     
-    @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(name = "automoveis_morador", 
-            joinColumns = @JoinColumn(name = "morador_id"), 
-            inverseJoinColumns = @JoinColumn(name = "automovel_id"))
-    private List<Automovel> automoveis;
+    @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<MoradorAutomovel> automoveis;
+    
+    //@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   // private Set<MoradorAutomovel> automoveis;
+    
+    //@OneToMany(mappedBy = "morador",orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinColumns({
+//        @JoinColumn(name="morador_id", referencedColumnName="id"),
+//        @JoinColumn(name="automovel_id", referencedColumnName="id"),
+//        @JoinColumn(name="morador_automovel_id", referencedColumnName="id")
+//    })
+//    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private Set<MoradorAutomovel> automoveis;
+    
+    
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "morador_id_automovel_id", 
+//            joinColumns = @JoinColumn(name = "morador_id"), 
+//            inverseJoinColumns = @JoinColumn(name = "automovel_id"))
+//    private Set<MoradorAutomovel> automoveis;
 
     @PrePersist
     @PreUpdate
@@ -240,19 +262,21 @@ public class Morador implements Serializable {
         this.tipoMoradia = tipoMoradia;
     }
 
-    public List<Telefone> getTelefones() {
+    public Set<Telefone> getTelefones() {
         return telefones;
     }
 
-    public void setTelefones(List<Telefone> telefones) {
+    public void setTelefones(Set<Telefone> telefones) {
         this.telefones = telefones;
     }
 
-    public List<Automovel> getAutomoveis() {
+    public Set<MoradorAutomovel> getAutomoveis() {
         return automoveis;
     }
 
-    public void setAutomoveis(List<Automovel> automoveis) {
+    public void setAutomoveis(Set<MoradorAutomovel> automoveis) {
         this.automoveis = automoveis;
     }
+
+    
 }
