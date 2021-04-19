@@ -1,9 +1,7 @@
 
 package com.gesforback.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -14,14 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.PostPersist;
 import javax.persistence.PostUpdate;
@@ -35,7 +28,6 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
-//@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Morador implements Serializable {
     
     @Id
@@ -120,25 +112,6 @@ public class Morador implements Serializable {
     @JsonManagedReference
     private Set<MoradorAutomovel> automoveis;
     
-    //@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-   // private Set<MoradorAutomovel> automoveis;
-    
-    //@OneToMany(mappedBy = "morador",orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinColumns({
-//        @JoinColumn(name="morador_id", referencedColumnName="id"),
-//        @JoinColumn(name="automovel_id", referencedColumnName="id"),
-//        @JoinColumn(name="morador_automovel_id", referencedColumnName="id")
-//    })
-//    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private Set<MoradorAutomovel> automoveis;
-    
-    
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "morador_id_automovel_id", 
-//            joinColumns = @JoinColumn(name = "morador_id"), 
-//            inverseJoinColumns = @JoinColumn(name = "automovel_id"))
-//    private Set<MoradorAutomovel> automoveis;
-
     @PrePersist
     @PreUpdate
     @PostPersist
