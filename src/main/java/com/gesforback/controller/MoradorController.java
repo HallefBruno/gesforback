@@ -2,9 +2,11 @@
 package com.gesforback.controller;
 
 import com.gesforback.entity.EstadoCivil;
+import com.gesforback.entity.GrauParentesco;
 import com.gesforback.entity.Morador;
 import com.gesforback.entity.TipoResidencia;
 import com.gesforback.entity.dto.FabricanteDTO;
+import com.gesforback.entity.dto.GrauParentescoDTO;
 import com.gesforback.entity.dto.SexoDTO;
 import com.gesforback.entity.dto.TipoResidenciaDTO;
 import com.gesforback.service.AutomovelService;
@@ -68,6 +70,15 @@ public class MoradorController {
             tiposResidencias.add(new TipoResidenciaDTO(tipoMoradia.name(), tipoMoradia.getDescricao()));
         }
         return new ResponseEntity<>(tiposResidencias, HttpStatus.OK);
+    }
+    
+    @GetMapping("grau-parentesco")
+    public ResponseEntity<List<GrauParentescoDTO>> grauParentesco() {
+        List<GrauParentescoDTO> grauParentescos = new ArrayList<>();
+        for (GrauParentesco grauParentesco : GrauParentesco.values()) {
+            grauParentescos.add(new GrauParentescoDTO(grauParentesco.name(), grauParentesco.getDescricao()));
+        }
+        return new ResponseEntity<>(grauParentescos, HttpStatus.OK);
     }
     
     @GetMapping("fabricantes")

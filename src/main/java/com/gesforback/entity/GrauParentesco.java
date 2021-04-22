@@ -8,25 +8,33 @@ public enum GrauParentesco {
     
     ESPOSO("Esposo"),
     ESPOSA("Esposa"),
+    PAI("Pai"),
+    MAE("Mãe"),
+    AVÔ("Avô"),
+    AVÓ("Avó"),
     FILHO("Filho"),
     FILHA("Filha"),
     NETO("Neto"),
     NETA("Neta"),
+    BISNETO("Bisneto"),
+    BISNETA("Bisneta"),
     SOBRINHO("Sobrinho"),
     SOBRINHA("Sobrinha"),
-    PRIMO("Prima"),
+    PRIMO("Primo"),
     PRIMA("Prima"),
+    GENRO("Genro"),
+    NORA("Nora"),
     AMIGO("Amigo"),
     AMIGA("Amiga");
     
-    private String value;
+    private String descricao;
 
-    private GrauParentesco(String value) {
-        this.value = value;
+    private GrauParentesco(String descricao) {
+        this.descricao = descricao;
     }
     
-    public String getValue() {
-        return this.value;
+    public String getDescricao() {
+        return this.descricao;
     }
     
     @JsonCreator
