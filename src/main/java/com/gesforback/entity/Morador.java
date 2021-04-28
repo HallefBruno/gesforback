@@ -112,6 +112,10 @@ public class Morador implements Serializable {
     @JsonManagedReference
     private Set<MoradorAutomovel> automoveis;
     
+    @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<MoradorSecundario> moradorSecundarios;
+    
     @PrePersist
     @PreUpdate
     @PostPersist

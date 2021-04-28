@@ -41,6 +41,10 @@ public class MoradorAutomovel implements Serializable {
     @JoinColumn(name = "automovel_id")
     private Automovel automovel;
     
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "morador_secundario_id")
+    private MoradorSecundario moradorSecundario;
+    
     @NotBlank(message = "Placa não pode ter espaços em branco!")
     @NotEmpty(message = "Placa não pode ser vazio!")
     @NotNull(message = "Placa não pode ser null!")
@@ -88,6 +92,14 @@ public class MoradorAutomovel implements Serializable {
         this.automovel = automovel;
     }
 
+    public MoradorSecundario getMoradorSecundario() {
+        return moradorSecundario;
+    }
+
+    public void setMoradorSecundario(MoradorSecundario moradorSecundario) {
+        this.moradorSecundario = moradorSecundario;
+    }
+
     public String getPlaca() {
         return placa;
     }
@@ -103,6 +115,4 @@ public class MoradorAutomovel implements Serializable {
     public void setCor(String cor) {
         this.cor = cor;
     }
-    
-    
 }
