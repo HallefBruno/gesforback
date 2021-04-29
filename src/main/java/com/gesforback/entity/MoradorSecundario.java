@@ -1,6 +1,7 @@
 
 package com.gesforback.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,11 +19,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.StringUtils;
 
 @Entity
 public class MoradorSecundario implements Serializable {
@@ -93,11 +99,28 @@ public class MoradorSecundario implements Serializable {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "morador_id")
+    @JsonBackReference
     private Morador morador;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "grau_parentesco", nullable = false, length = 50)
     private GrauParentesco grauParentesco;
+    
+    @PrePersist
+    @PreUpdate
+    @PostPersist
+    @PostUpdate
+    private void removeLastSpaceBlankPersist() {
+        this.nome = StringUtils.strip(this.nome);
+        this.cpf = StringUtils.strip(this.cpf);
+        this.cpf = this.cpf.replaceAll("[^\\w\\s]", "");
+        this.rg = StringUtils.strip(this.rg);
+        this.orgaoEmissor = StringUtils.strip(this.orgaoEmissor);
+        this.naturalidade = StringUtils.strip(this.naturalidade);
+        this.sexo = StringUtils.strip(this.sexo);
+        this.telefone = this.telefone.replaceAll("[^\\w\\s]", "");
+        this.telefone = StringUtils.strip(this.telefone);
+    }
 
     public UUID getId() {
         return id;

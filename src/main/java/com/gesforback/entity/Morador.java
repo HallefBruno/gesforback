@@ -255,5 +255,14 @@ public class Morador implements Serializable {
         this.automoveis = automoveis;
     }
 
+    public Set<MoradorSecundario> getMoradorSecundarios() {
+        return moradorSecundarios;
+    }
+
+    public void setMoradorSecundarios(Set<MoradorSecundario> moradorSecundarios) {
+        this.moradorSecundarios = moradorSecundarios;
+    }
+    
+    
     
 }
