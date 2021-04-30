@@ -94,12 +94,10 @@ public class MoradorSecundario implements Serializable {
     private String telefone;
     
     @OneToMany(mappedBy = "moradorSecundario", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private Set<MoradorAutomovel> automoveis;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "morador_id")
-    @JsonBackReference
     private Morador morador;
     
     @Enumerated(EnumType.STRING)
@@ -108,18 +106,14 @@ public class MoradorSecundario implements Serializable {
     
     @PrePersist
     @PreUpdate
-    @PostPersist
-    @PostUpdate
     private void removeLastSpaceBlankPersist() {
         this.nome = StringUtils.strip(this.nome);
-        this.cpf = StringUtils.strip(this.cpf);
         this.cpf = this.cpf.replaceAll("[^\\w\\s]", "");
+        this.cpf = StringUtils.strip(this.cpf);
         this.rg = StringUtils.strip(this.rg);
         this.orgaoEmissor = StringUtils.strip(this.orgaoEmissor);
         this.naturalidade = StringUtils.strip(this.naturalidade);
-        this.sexo = StringUtils.strip(this.sexo);
-        this.telefone = this.telefone.replaceAll("[^\\w\\s]", "");
-        this.telefone = StringUtils.strip(this.telefone);
+        this.telefone = this.telefone.replaceAll("[^\\w\\s]", "").trim();
     }
 
     public UUID getId() {

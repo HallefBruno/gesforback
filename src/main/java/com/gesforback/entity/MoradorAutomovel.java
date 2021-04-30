@@ -38,12 +38,12 @@ public class MoradorAutomovel implements Serializable {
     private Morador morador;
 
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "automovel_id")
-    private Automovel automovel;
-    
-    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "morador_secundario_id")
     private MoradorSecundario moradorSecundario;
+    
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "automovel_id")
+    private Automovel automovel;
     
     @NotBlank(message = "Placa não pode ter espaços em branco!")
     @NotEmpty(message = "Placa não pode ser vazio!")
@@ -60,8 +60,6 @@ public class MoradorAutomovel implements Serializable {
     
     @PrePersist
     @PreUpdate
-    @PostPersist
-    @PostUpdate
     private void removeLastSpaceBlankPersist() {
         this.placa = StringUtils.strip(this.placa);
         this.cor = StringUtils.strip(this.cor);

@@ -46,8 +46,6 @@ public class Telefone implements Serializable {
     
     @PrePersist
     @PreUpdate
-    @PostPersist
-    @PostUpdate
     private void removeLastSpaceBlankPersist() {
         this.numero = StringUtils.strip(this.numero);
         this.numero = this.numero.replaceAll("[^A-Za-z0-9]","").trim();

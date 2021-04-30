@@ -113,13 +113,10 @@ public class Morador implements Serializable {
     private Set<MoradorAutomovel> automoveis;
     
     @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private Set<MoradorSecundario> moradorSecundarios;
     
     @PrePersist
     @PreUpdate
-    @PostPersist
-    @PostUpdate
     private void removeLastSpaceBlankPersist() {
         this.nome = StringUtils.strip(this.nome);
         this.cpf = StringUtils.strip(this.cpf);
