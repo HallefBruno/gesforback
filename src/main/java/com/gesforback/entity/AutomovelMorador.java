@@ -12,8 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PostPersist;
-import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -24,8 +22,8 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 
 @Entity
-@Table(name = "morador_automovel")
-public class MoradorAutomovel implements Serializable {
+@Table(name = "automovel_morador")
+public class AutomovelMorador implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,16 +31,7 @@ public class MoradorAutomovel implements Serializable {
     private UUID id;
     
     @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "morador_id")
-    @JsonBackReference
-    private Morador morador;
-
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "morador_secundario_id")
-    private MoradorSecundario moradorSecundario;
-    
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name = "automovel_id")
+    @JoinColumn(nullable = false,name = "automovel_id")
     private Automovel automovel;
     
     @NotBlank(message = "Placa não pode ter espaços em branco!")
@@ -60,7 +49,7 @@ public class MoradorAutomovel implements Serializable {
     
     @PrePersist
     @PreUpdate
-    private void removeLastSpaceBlankPersist() {
+    private void prePersistPreUpdate() {
         this.placa = StringUtils.strip(this.placa);
         this.cor = StringUtils.strip(this.cor);
         this.placa = this.placa.replaceAll("[^\\w\\s]", "");
@@ -74,28 +63,12 @@ public class MoradorAutomovel implements Serializable {
         this.id = id;
     }
 
-    public Morador getMorador() {
-        return morador;
-    }
-
-    public void setMorador(Morador morador) {
-        this.morador = morador;
-    }
-
     public Automovel getAutomovel() {
         return automovel;
     }
 
     public void setAutomovel(Automovel automovel) {
         this.automovel = automovel;
-    }
-
-    public MoradorSecundario getMoradorSecundario() {
-        return moradorSecundario;
-    }
-
-    public void setMoradorSecundario(MoradorSecundario moradorSecundario) {
-        this.moradorSecundario = moradorSecundario;
     }
 
     public String getPlaca() {
@@ -113,4 +86,14 @@ public class MoradorAutomovel implements Serializable {
     public void setCor(String cor) {
         this.cor = cor;
     }
+
+    
 }
+//    @ManyToOne(fetch=FetchType.EAGER)
+//    @JoinColumn(nullable = false,name = "morador_id")
+//    @JsonBackReference
+//    private Morador morador;
+//
+//    @ManyToOne(fetch=FetchType.EAGER)
+//    @JoinColumn(nullable = false,name = "morador_secundario_id")
+//    private MoradorSecundario moradorSecundario;

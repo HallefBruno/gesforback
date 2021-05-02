@@ -15,9 +15,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.PostPersist;
-import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
@@ -108,19 +109,19 @@ public class Morador implements Serializable {
     @JsonManagedReference
     private Set<Telefone> telefones;
     
-    @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private Set<MoradorAutomovel> automoveis;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(joinColumns = @JoinColumn(name = "morador_id"),inverseJoinColumns = @JoinColumn(name = "automovel_morador_id"))
+    private Set<AutomovelMorador> automoveisMoradores;
     
     @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<MoradorSecundario> moradorSecundarios;
     
     @PrePersist
     @PreUpdate
-    private void removeLastSpaceBlankPersist() {
+    private void prePersistPreUpdate() {
         this.nome = StringUtils.strip(this.nome);
-        this.cpf = StringUtils.strip(this.cpf);
-        this.cpf = this.cpf.replaceAll("[^\\w\\s]", "");
+        this.cpf = StringUtils.getDigits(this.cpf);
         this.rg = StringUtils.strip(this.rg);
         this.orgaoEmissor = StringUtils.strip(this.orgaoEmissor);
         this.naturalidade = StringUtils.strip(this.naturalidade);
@@ -130,7 +131,6 @@ public class Morador implements Serializable {
 
     //@NumberFormat(style = Style.CURRENCY, pattern = "###,##0.00")
     //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss", iso = ISO.DATE_TIME)
-
 
     public UUID getId() {
         return id;
@@ -244,12 +244,12 @@ public class Morador implements Serializable {
         this.telefones = telefones;
     }
 
-    public Set<MoradorAutomovel> getAutomoveis() {
-        return automoveis;
+    public Set<AutomovelMorador> getAutomoveisMoradores() {
+        return automoveisMoradores;
     }
 
-    public void setAutomoveis(Set<MoradorAutomovel> automoveis) {
-        this.automoveis = automoveis;
+    public void setAutomoveisMoradores(Set<AutomovelMorador> automoveisMoradores) {
+        this.automoveisMoradores = automoveisMoradores;
     }
 
     public Set<MoradorSecundario> getMoradorSecundarios() {
@@ -259,7 +259,10 @@ public class Morador implements Serializable {
     public void setMoradorSecundarios(Set<MoradorSecundario> moradorSecundarios) {
         this.moradorSecundarios = moradorSecundarios;
     }
-    
+
     
     
 }
+//    @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JsonManagedReference
+//    private Set<AutomovelMorador> automoveis;

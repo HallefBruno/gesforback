@@ -2,7 +2,6 @@
 package com.gesforback.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -17,10 +16,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PostPersist;
-import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
@@ -38,7 +36,6 @@ public class MoradorSecundario implements Serializable {
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     private UUID id;
     
-    //@Size(max = 100, min = 3, message = "Quantidade máxima de caracter 12 e minimo 10")
     @NotBlank(message = "Nome não pode ter espaços em branco!")
     @NotEmpty(message = "Nome não pode ser vazio!")
     @NotNull(message = "Nome não pode ser null!")
@@ -51,14 +48,12 @@ public class MoradorSecundario implements Serializable {
     @Column(unique = true, length = 11, nullable = false)
     private String cpf;
     
-    //@Size(max = 11, message = "Quantidade máxima de caracter 11")
     @NotBlank(message = "RG não pode ter espaços em branco!")
     @NotEmpty(message = "RG não pode ser vazio!")
     @NotNull(message = "RG não pode ser null!")
     @Column(unique = true, length = 11,nullable = false)
     private String rg;
     
-    //@Size(max = 11, min = 3, message = "Quantidade máxima de caracter 11 e minimo 3")
     @NotBlank(message = "Orgão emissor não pode ter espaços em branco!")
     @NotEmpty(message = "Orgão emissor não pode ser vazio!")
     @NotNull(message = "Orgão emissor não pode ser null!")
@@ -69,7 +64,6 @@ public class MoradorSecundario implements Serializable {
     @Column(name = "data_nascimento", nullable = false)
     private Date dataNascimento;
     
-    //@Size(max = 100, min = 3, message = "Quantidade máxima de caracter 100 e minimo 3")
     @NotBlank(message = "Naturalidade não pode ter espaços em branco!")
     @NotEmpty(message = "Naturalidade não pode ser vazio!")
     @NotNull(message = "Naturalidade não pode ser null!")
@@ -80,7 +74,6 @@ public class MoradorSecundario implements Serializable {
     @Column(nullable = false, length = 20, name = "estado_civil")
     private EstadoCivil estadoCivil;
     
-    //@Size(max = 20, message = "Quantidade máxima de caracter 20")
     @NotBlank(message = "Sexo não pode ter espaços em branco!")
     @NotEmpty(message = "Sexo não pode ser vazio!")
     @NotNull(message = "Sexo não pode ser null!")
@@ -93,11 +86,13 @@ public class MoradorSecundario implements Serializable {
     @Column(length = 11, nullable = false, unique = true)
     private String telefone;
     
-    @OneToMany(mappedBy = "moradorSecundario", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<MoradorAutomovel> automoveis;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(joinColumns = @JoinColumn(name = "morador_secundario_id"),inverseJoinColumns = @JoinColumn(name = "automovel_morador_id"))
+    private Set<AutomovelMorador> automoveisMoradores;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "morador_id")
+    @JsonBackReference
     private Morador morador;
     
     @Enumerated(EnumType.STRING)
@@ -106,14 +101,13 @@ public class MoradorSecundario implements Serializable {
     
     @PrePersist
     @PreUpdate
-    private void removeLastSpaceBlankPersist() {
+    private void prePersistPreUpdate() {
         this.nome = StringUtils.strip(this.nome);
-        this.cpf = this.cpf.replaceAll("[^\\w\\s]", "");
-        this.cpf = StringUtils.strip(this.cpf);
+        this.cpf = StringUtils.getDigits(this.cpf);
         this.rg = StringUtils.strip(this.rg);
         this.orgaoEmissor = StringUtils.strip(this.orgaoEmissor);
         this.naturalidade = StringUtils.strip(this.naturalidade);
-        this.telefone = this.telefone.replaceAll("[^\\w\\s]", "").trim();
+        this.telefone = StringUtils.getDigits(this.telefone);
     }
 
     public UUID getId() {
@@ -196,12 +190,12 @@ public class MoradorSecundario implements Serializable {
         this.telefone = telefone;
     }
 
-    public Set<MoradorAutomovel> getAutomoveis() {
-        return automoveis;
+    public Set<AutomovelMorador> getAutomoveisMoradores() {
+        return automoveisMoradores;
     }
 
-    public void setAutomoveis(Set<MoradorAutomovel> automoveis) {
-        this.automoveis = automoveis;
+    public void setAutomoveisMoradores(Set<AutomovelMorador> automoveisMoradores) {
+        this.automoveisMoradores = automoveisMoradores;
     }
 
     public Morador getMorador() {
@@ -219,7 +213,8 @@ public class MoradorSecundario implements Serializable {
     public void setGrauParentesco(GrauParentesco grauParentesco) {
         this.grauParentesco = grauParentesco;
     }
-    
-    
+
     
 }
+//    @OneToMany(mappedBy = "moradorSecundario", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private Set<AutomovelMorador> automoveis;
