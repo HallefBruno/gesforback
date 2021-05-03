@@ -1,6 +1,7 @@
 
 package com.gesforback.controller;
 
+import com.gesforback.entity.DataTable;
 import com.gesforback.entity.EstadoCivil;
 import com.gesforback.entity.GrauParentesco;
 import com.gesforback.entity.Morador;
@@ -9,6 +10,7 @@ import com.gesforback.entity.dto.FabricanteDTO;
 import com.gesforback.entity.dto.GrauParentescoDTO;
 import com.gesforback.entity.dto.SexoDTO;
 import com.gesforback.entity.dto.TipoResidenciaDTO;
+import com.gesforback.entity.filtros.FiltrosMorador;
 import com.gesforback.service.AutomovelService;
 import com.gesforback.service.FabricanteService;
 import com.gesforback.service.MoradorService;
@@ -34,13 +36,17 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping(path = {"morador"})
 public class MoradorController {
     
-    @Autowired
     private FabricanteService fabricanteService;
-    @Autowired
     private AutomovelService automovelService;
-    @Autowired
     private MoradorService moradorService;
     
+    @Autowired
+    public MoradorController(FabricanteService fabricanteService, AutomovelService automovelService, MoradorService moradorService) {
+        this.fabricanteService = fabricanteService;
+        this.automovelService = automovelService;
+        this.moradorService = moradorService;
+    }
+
     @PostMapping(path = {"salvar"})
     public ResponseEntity<?> salvar(@Valid @RequestBody Morador morador) {
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/morador/buscar/{id}").buildAndExpand(moradorService.salvar(morador).getId()).toUri();
@@ -98,6 +104,18 @@ public class MoradorController {
         return new ResponseEntity<>(automovelService.automoveis(automovel,fabricanteId, page),HttpStatus.OK);
     }
     
-    
+    @GetMapping(path = {"todos"})
+    public ResponseEntity<?> filtrar(
+        @RequestParam(name = "draw", required = false) Integer draw, 
+        @RequestParam(name = "start", required = false) Integer start,  
+        @RequestParam(name = "length", required = false) Integer length,
+        @RequestBody(required = false) FiltrosMorador filtrosMorador)
+    {
+        if(draw != null) {
+            DataTable page = moradorService.todos(filtrosMorador,draw, start, length);
+            return new ResponseEntity<>(page, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(moradorService.todos(), HttpStatus.OK);
+    }
     
 }

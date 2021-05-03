@@ -28,7 +28,6 @@ public class FilipetaService {
         filipetaCadastrada.ifPresent((f) -> {
             throw new NegocioException("Essa filipe já foi cadastrada");
         });
-        filipeta.setId(UUID.randomUUID());
         Filipeta nova = filipetaRepository.save(filipeta);
         return nova;
     }

@@ -95,7 +95,7 @@ public class Morador implements Serializable {
     
     @NotNull(message = "Quantidade de moradores não pode ser null!")
     @Column(nullable = false, name = "qtd_moradores")
-    private Integer qdtMoradores;
+    private Integer qtdMoradores;
     
     @NotNull(message = "Animal domestico não pode ser null!")
     @Column(nullable = false, name = "animal_domestico")
@@ -128,6 +128,8 @@ public class Morador implements Serializable {
         this.sexo = StringUtils.strip(this.sexo);
         this.residencia = StringUtils.strip(this.residencia);
     }
+    
+    
 
     //@NumberFormat(style = Style.CURRENCY, pattern = "###,##0.00")
     //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss", iso = ISO.DATE_TIME)
@@ -212,12 +214,12 @@ public class Morador implements Serializable {
         this.residencia = residencia;
     }
 
-    public Integer getQdtMoradores() {
-        return qdtMoradores;
+    public Integer getQtdMoradores() {
+        return qtdMoradores;
     }
 
-    public void setQdtMoradores(Integer qdtMoradores) {
-        this.qdtMoradores = qdtMoradores;
+    public void setQtdMoradores(Integer qtdMoradores) {
+        this.qtdMoradores = qtdMoradores;
     }
 
     public Boolean getAnimalDomestico() {
@@ -260,8 +262,6 @@ public class Morador implements Serializable {
         this.moradorSecundarios = moradorSecundarios;
     }
 
-    
-    
 }
 //    @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @JsonManagedReference

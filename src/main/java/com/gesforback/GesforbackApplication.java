@@ -42,7 +42,7 @@ public class GesforbackApplication implements CommandLineRunner {
         morador.setAnimalDomestico(Boolean.FALSE);
         morador.setDataNascimento(new Date());
         morador.setEstadoCivil(EstadoCivil.CASADO);
-        morador.setQdtMoradores(3);
+        morador.setQtdMoradores(3);
         morador.setTipoMoradia(TipoResidencia.CASA);
         morador.setResidencia("CASA 4");
         
