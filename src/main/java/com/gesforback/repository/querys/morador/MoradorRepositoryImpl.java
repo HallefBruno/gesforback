@@ -35,28 +35,29 @@ public class MoradorRepositoryImpl implements MoradorRepositoryCustom {
         Root<Morador> morador = query.from(Morador.class);
         Join<Morador, Telefone> telefone = (Join) morador.fetch("telefones");
         Join<Morador, MoradorSecundario> moradorSecundario = (Join) morador.fetch("moradorSecundarios");
-        List<Predicate> predicates = new ArrayList<>();
         
+        List<Predicate> predicates = new ArrayList<>();
+
         if (!StringUtils.isBlank(filtros.map(FiltrosMorador::getNome).orElse(""))) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.upper(morador.get("nome")), "%" + filtrosMorador.getNome().toUpperCase() + "%"));
         }
         if (!StringUtils.isBlank(filtros.map(FiltrosMorador::getCpf).orElse(""))) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(morador.get("cpf")), "%" + filtrosMorador.getCpf() + "%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(morador.get("cpf")), "%" + StringUtils.getDigits(filtrosMorador.getCpf()) + "%"));
         }
         if (!StringUtils.isBlank(filtros.map(FiltrosMorador::getResidencia).orElse(""))) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.upper(morador.get("residencia")), "%" + filtrosMorador.getResidencia().toUpperCase() + "%"));
         }
         if (!StringUtils.isBlank(filtros.map(FiltrosMorador::getTelefone).orElse(""))) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(telefone.get("numero")), "%" + filtrosMorador.getTelefone() + "%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(telefone.get("numero")), "%" + StringUtils.getDigits(filtrosMorador.getTelefone()) + "%"));
         }
         if (!StringUtils.isBlank(filtros.map(FiltrosMorador::getNome).orElse(""))) {
             predicates.add(criteriaBuilder.like(criteriaBuilder.upper(moradorSecundario.get("nome")), "%" + filtrosMorador.getNome().toUpperCase() + "%"));
         }
         if (!StringUtils.isBlank(filtros.map(FiltrosMorador::getCpf).orElse(""))) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(moradorSecundario.get("cpf")), "%" + filtrosMorador.getCpf() + "%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(moradorSecundario.get("cpf")), "%" + StringUtils.getDigits(filtrosMorador.getCpf()) + "%"));
         }
         if (!StringUtils.isBlank(filtros.map(FiltrosMorador::getTelefone).orElse(""))) {
-            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(moradorSecundario.get("telefone")), "%" + filtrosMorador.getTelefone() + "%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.upper(moradorSecundario.get("telefone")), "%" + StringUtils.getDigits(filtrosMorador.getTelefone()) + "%"));
         }
 
         query.select(morador).distinct(true);
@@ -79,3 +80,8 @@ public class MoradorRepositoryImpl implements MoradorRepositoryCustom {
     }
     
 }
+
+//Expression<String> cpfMoradorProprietario = morador.get("cpf");
+//Expression<String> cpfMoradorSecundario = moradorSecundario.get("cpf");
+//criteriaBuilder.function("REGEXP_REPLACE", String.class,cpfMoradorProprietario, criteriaBuilder.literal("[^a-zA-Z0-9]+"), criteriaBuilder.literal(""));
+//criteriaBuilder.function("REGEXP_REPLACE", String.class,cpfMoradorSecundario, criteriaBuilder.literal("[^a-zA-Z0-9]+"), criteriaBuilder.literal(""));
