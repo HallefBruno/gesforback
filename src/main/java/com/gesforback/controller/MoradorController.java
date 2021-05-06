@@ -112,7 +112,7 @@ public class MoradorController {
         @RequestBody(required = false) FiltrosMorador filtrosMorador)
     {
         if(draw != null) {
-            DataTable page = moradorService.todos(filtrosMorador,draw, start, length);
+            DataTable page = moradorService.todos(filtrosMorador,draw, start);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }
         return new ResponseEntity<>(moradorService.todos(), HttpStatus.OK);

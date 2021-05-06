@@ -25,7 +25,7 @@ public class MoradorRepositoryImpl implements MoradorRepositoryCustom {
     private EntityManager em;
 
     @Override
-    public DataTable<Morador> filtrar(FiltrosMorador filtrosMorador, int draw, int start, int length) {
+    public DataTable<Morador> filtrar(FiltrosMorador filtrosMorador, int draw, int start) {
         
         Optional<FiltrosMorador> filtros = Optional.ofNullable(filtrosMorador);
         
