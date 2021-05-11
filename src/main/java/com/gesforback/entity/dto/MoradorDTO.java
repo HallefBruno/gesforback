@@ -1,26 +1,43 @@
 
 package com.gesforback.entity.dto;
 
+import java.util.UUID;
+
 /**
  *
  * @author halle
  */
 public class MoradorDTO {
     
+    private UUID id;
     private String nome;
     private String cpf;
     private String telefone;
     private String residencia;
     private String sexo;
     private String estadoCivil;
+    private boolean isProprietario;
 
-    public MoradorDTO(String nome, String cpf, String telefone, String residencia, String sexo, String estadoCivil) {
+    public MoradorDTO() {
+    }
+
+    public MoradorDTO(UUID id, String nome, String cpf, String telefone, String residencia, String sexo, String estadoCivil, boolean isProprietario) {
+        this.id = id;
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.residencia = residencia;
         this.sexo = sexo;
         this.estadoCivil = estadoCivil;
+        this.isProprietario = isProprietario;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -70,6 +87,14 @@ public class MoradorDTO {
     public void setEstadoCivil(String estadoCivil) {
         this.estadoCivil = estadoCivil;
     }
-    
+
+    public boolean isIsProprietario() {
+        return isProprietario;
+    }
+
+    public void setIsProprietario(boolean isProprietario) {
+        this.isProprietario = isProprietario;
+    }
+
     
 }

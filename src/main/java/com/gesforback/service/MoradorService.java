@@ -10,6 +10,7 @@ import com.gesforback.entity.filtros.FiltrosMorador;
 import com.gesforback.exception.NonNullRuntimeException;
 import com.gesforback.exception.NotFoundRuntimeException;
 import com.gesforback.repository.MoradorRepository;
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,8 +44,41 @@ public class MoradorService {
         throw new NonNullRuntimeException("Id não pode ser null");
     }
     
-    public DataTable<MoradorDTO> todos(FiltrosMorador filtrosMorador, int draw, int start) {
+    public DataTable<MoradorDTO> todos(String filtros, int draw, int start) {
+        Gson converter = new Gson();
+        FiltrosMorador filtrosMorador = converter.fromJson(filtros, FiltrosMorador.class);
+        DataTable<Morador> moradores = moradorRepository.filtrar(filtrosMorador, draw, start);
+        List<MoradorDTO> novaListaMoradores = new ArrayList<>();
+        DataTable<MoradorDTO> dataTable = new DataTable<>();
         
+        for (Morador morador : moradores.getData()) {
+            String telefones = morador.getTelefones().stream().map(Telefone::getNumero).collect(Collectors.joining(", "));
+            novaListaMoradores.add(new MoradorDTO(morador.getId(),morador.getNome(), morador.getCpf(), telefones, morador.getResidencia(), morador.getSexo(), morador.getEstadoCivil().getDescricao(), Boolean.TRUE));
+            if (!filtrosMorador.isIsProprietario()) {
+                for (MoradorSecundario moradorSecundario : morador.getMoradorSecundarios()) {
+                    novaListaMoradores.add(new MoradorDTO(morador.getId(),moradorSecundario.getNome(), moradorSecundario.getCpf(), moradorSecundario.getTelefone(), moradorSecundario.getMorador().getResidencia(), moradorSecundario.getSexo(), moradorSecundario.getEstadoCivil().getDescricao(), Boolean.FALSE));
+                }
+            }
+        }
+        
+        dataTable.setData(novaListaMoradores);
+        dataTable.setDraw(moradores.getDraw());
+        dataTable.setStart(moradores.getStart());
+        dataTable.setRecordsFiltered(novaListaMoradores.size());
+        dataTable.setRecordsTotal(novaListaMoradores.size());
+        return dataTable;
+    }
+    
+    public List<Morador> todos() {
+        return moradorRepository.findAll();
+    }
+}
+
+
+/**
+ * public DataTable<MoradorDTO> todos(String filtros, int draw, int start) {
+        Gson converter = new Gson();
+        FiltrosMorador filtrosMorador = converter.fromJson(filtros, FiltrosMorador.class);
         DataTable<Morador> moradores = moradorRepository.filtrar(filtrosMorador, draw, start);
         List<MoradorDTO> novaListaMoradores = new ArrayList<>();
         DataTable<MoradorDTO> dataTable = new DataTable<>();
@@ -64,8 +98,9 @@ public class MoradorService {
         dataTable.setRecordsTotal(novaListaMoradores.size());
         return dataTable;
     }
-    
-    public List<Morador> todos() {
-        return moradorRepository.findAll();
-    }
-}
+    * //    public DataTable<MoradorDTO> todos(String filtros, int draw, int start) {
+//        Gson converter = new Gson();
+//        FiltrosMorador filtrosMorador = converter.fromJson(filtros, FiltrosMorador.class);
+//        return null;
+//    }
+ */

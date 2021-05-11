@@ -7,6 +7,7 @@ public class FiltrosMorador {
     private String cpf;
     private String residencia;
     private String telefone;
+    private boolean isProprietario;
 
     public String getNome() {
         return nome;
@@ -38,5 +39,13 @@ public class FiltrosMorador {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public boolean isIsProprietario() {
+        return isProprietario;
+    }
+
+    public void setIsProprietario(boolean isProprietario) {
+        this.isProprietario = isProprietario;
     }
 }

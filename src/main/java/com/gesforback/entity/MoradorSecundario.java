@@ -86,6 +86,12 @@ public class MoradorSecundario implements Serializable {
     @Column(length = 11, nullable = false, unique = true)
     private String telefone;
     
+    @NotBlank(message = "Residência não pode ter espaços em branco!")
+    @NotEmpty(message = "Residência não pode ser vazio!")
+    @NotNull(message = "Residência não pode ser null!")
+    @Column(nullable = false, length = 255)
+    private String residencia;
+    
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(joinColumns = @JoinColumn(name = "morador_secundario_id"),inverseJoinColumns = @JoinColumn(name = "automovel_morador_id"))
     private Set<AutomovelMorador> automoveisMoradores;
@@ -101,6 +107,7 @@ public class MoradorSecundario implements Serializable {
     
     @PrePersist
     @PreUpdate
+    @SuppressWarnings("null")
     private void prePersistPreUpdate() {
         this.nome = StringUtils.strip(this.nome);
         this.cpf = StringUtils.getDigits(this.cpf);
@@ -108,6 +115,9 @@ public class MoradorSecundario implements Serializable {
         this.orgaoEmissor = StringUtils.strip(this.orgaoEmissor);
         this.naturalidade = StringUtils.strip(this.naturalidade);
         this.telefone = StringUtils.getDigits(this.telefone);
+        if(this.residencia == null || StringUtils.isBlank(this.residencia)) {
+            this.residencia = this.morador.getResidencia();
+        }
     }
 
     public UUID getId() {
@@ -190,6 +200,14 @@ public class MoradorSecundario implements Serializable {
         this.telefone = telefone;
     }
 
+    public String getResidencia() {
+        return residencia;
+    }
+
+    public void setResidencia(String residencia) {
+        this.residencia = residencia;
+    }
+
     public Set<AutomovelMorador> getAutomoveisMoradores() {
         return automoveisMoradores;
     }
@@ -213,6 +231,8 @@ public class MoradorSecundario implements Serializable {
     public void setGrauParentesco(GrauParentesco grauParentesco) {
         this.grauParentesco = grauParentesco;
     }
+
+    
 
     
 }

@@ -108,8 +108,8 @@ public class MoradorController {
     public ResponseEntity<?> filtrar(
         @RequestParam(name = "draw", required = false) Integer draw, 
         @RequestParam(name = "start", required = false) Integer start,  
-        @RequestParam(name = "length", required = false) Integer length,
-        @RequestBody(required = false) FiltrosMorador filtrosMorador)
+        @RequestParam(name = "length", required = false) Integer length, 
+        @RequestParam(name = "filtrosMorador",required = false) String filtrosMorador)
     {
         if(draw != null) {
             DataTable page = moradorService.todos(filtrosMorador,draw, start);
