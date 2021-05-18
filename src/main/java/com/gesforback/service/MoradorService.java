@@ -64,8 +64,8 @@ public class MoradorService {
         dataTable.setData(novaListaMoradores);
         dataTable.setDraw(moradores.getDraw());
         dataTable.setStart(moradores.getStart());
-        dataTable.setRecordsFiltered(novaListaMoradores.size());
-        dataTable.setRecordsTotal(novaListaMoradores.size());
+        dataTable.setRecordsFiltered(moradores.getRecordsFiltered());
+        dataTable.setRecordsTotal(moradores.getRecordsTotal());
         return dataTable;
     }
     
