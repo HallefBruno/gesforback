@@ -10,7 +10,6 @@ import com.gesforback.entity.dto.FabricanteDTO;
 import com.gesforback.entity.dto.GrauParentescoDTO;
 import com.gesforback.entity.dto.SexoDTO;
 import com.gesforback.entity.dto.TipoResidenciaDTO;
-import com.gesforback.entity.filtros.FiltrosMorador;
 import com.gesforback.service.AutomovelService;
 import com.gesforback.service.FabricanteService;
 import com.gesforback.service.MoradorService;
@@ -26,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -116,6 +116,12 @@ public class MoradorController {
             return new ResponseEntity<>(page, HttpStatus.OK);
         }
         return new ResponseEntity<>(moradorService.todos(), HttpStatus.OK);
+    }
+    
+    @PutMapping(path = {"alterar/{id}"})
+    public ResponseEntity<Morador> alterar(@Valid @RequestBody Morador morador, @PathVariable(required = true) UUID id) { 
+        Morador moradorUpdate = moradorService.update(morador, id);
+        return ResponseEntity.ok(moradorUpdate);
     }
     
 }

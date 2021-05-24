@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,20 @@ public class MoradorService {
     public Morador salvar(Morador morador) {
         Morador novoMorador = moradorRepository.save(morador);
         return novoMorador;
+    }
+    
+    @Transactional
+    public Morador update(Morador moradorUpdate, UUID id) {
+        if (Objects.nonNull(id)) {
+            Optional<Morador> moradorAtual = moradorRepository.findById(id);
+            if(moradorAtual.isPresent()) {
+                BeanUtils.copyProperties(moradorUpdate,moradorAtual.get(), "id");
+                moradorUpdate = moradorRepository.save(moradorAtual.get());
+                return moradorUpdate;
+            }
+            return moradorAtual.orElseThrow(() -> new NotFoundRuntimeException("Nenhum morador encontrada!"));
+        }
+        throw new NonNullRuntimeException("Id não pode ser null");
     }
     
     public Morador buscarPorId(UUID id) {
