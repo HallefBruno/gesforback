@@ -54,7 +54,7 @@ public class MoradorController {
         headers.setLocation(uri);
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
-
+    
     @GetMapping(path = {"buscar/{id}"})
     public ResponseEntity<Morador> buscarPorId(@PathVariable(required = true) UUID id) {
         return ResponseEntity.ok(moradorService.buscarPorId(id));
