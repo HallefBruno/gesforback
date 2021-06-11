@@ -4,6 +4,7 @@ package com.gesforback.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -116,7 +117,13 @@ public class Morador implements Serializable {
     @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<MoradorSecundario> moradorSecundarios;
-    
+
+    public Morador() {
+        this.moradorSecundarios = new HashSet<>();
+        this.automoveisMoradores = new HashSet<>();
+        this.telefones = new HashSet<>();
+    }
+
     @PrePersist
     @PreUpdate
     private void prePersistPreUpdate() {
@@ -128,8 +135,6 @@ public class Morador implements Serializable {
         this.sexo = StringUtils.strip(this.sexo);
         this.residencia = StringUtils.strip(this.residencia);
     }
-    
-    
 
     //@NumberFormat(style = Style.CURRENCY, pattern = "###,##0.00")
     //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss", iso = ISO.DATE_TIME)
@@ -243,7 +248,8 @@ public class Morador implements Serializable {
     }
 
     public void setTelefones(Set<Telefone> telefones) {
-        this.telefones = telefones;
+        this.telefones.clear();
+        this.telefones.addAll(telefones);
     }
 
     public Set<AutomovelMorador> getAutomoveisMoradores() {
@@ -251,7 +257,8 @@ public class Morador implements Serializable {
     }
 
     public void setAutomoveisMoradores(Set<AutomovelMorador> automoveisMoradores) {
-        this.automoveisMoradores = automoveisMoradores;
+        this.automoveisMoradores.clear();
+        this.automoveisMoradores.addAll(automoveisMoradores);
     }
 
     public Set<MoradorSecundario> getMoradorSecundarios() {
@@ -259,7 +266,8 @@ public class Morador implements Serializable {
     }
 
     public void setMoradorSecundarios(Set<MoradorSecundario> moradorSecundarios) {
-        this.moradorSecundarios = moradorSecundarios;
+        this.moradorSecundarios.clear();
+        this.moradorSecundarios.addAll(moradorSecundarios);
     }
 
 }
