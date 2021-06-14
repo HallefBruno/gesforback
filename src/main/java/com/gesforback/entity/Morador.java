@@ -111,7 +111,7 @@ public class Morador implements Serializable {
     private Set<Telefone> telefones;
     
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(joinColumns = @JoinColumn(name = "morador_id"),inverseJoinColumns = @JoinColumn(name = "automovel_morador_id"))
+    @JoinTable(name = "morador_proprietario_automoveis",joinColumns = @JoinColumn(name = "morador_id"),inverseJoinColumns = @JoinColumn(name = "automovel_morador_id"))
     private Set<AutomovelMorador> automoveisMoradores;
     
     @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
