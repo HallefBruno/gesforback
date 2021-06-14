@@ -106,7 +106,7 @@ public class Morador implements Serializable {
     @Column(nullable = false, length = 40, name = "tipo_moradia")
     private TipoResidencia tipoMoradia;
 
-    @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "morador", orphanRemoval = true, cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<Telefone> telefones;
     

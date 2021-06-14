@@ -2,6 +2,7 @@
 package com.gesforback.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -13,14 +14,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PostPersist;
-import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-//import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -39,7 +37,7 @@ public class Telefone implements Serializable {
     @Column(length = 11, nullable = false, unique = true)
     private String numero;
     
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name="morador_id") 
     @JsonBackReference
     private Morador morador;

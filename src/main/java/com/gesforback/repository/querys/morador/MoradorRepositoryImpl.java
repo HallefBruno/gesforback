@@ -34,10 +34,10 @@ public class MoradorRepositoryImpl implements MoradorRepositoryCustom {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Morador> query = cb.createQuery(Morador.class);
         Root<Morador> morador = query.from(Morador.class);
-        Join<Morador, Telefone> telefone = (Join) morador.fetch("telefones");
+        Join<Morador, Telefone> telefone = (Join) morador.<Morador, Telefone>fetch("telefones", JoinType.LEFT); //morador.fetch("telefones");
         Join<Morador, MoradorSecundario> moradorSecundario = (Join) morador.<Morador, MoradorSecundario>fetch("moradorSecundarios", JoinType.LEFT);
         List<Predicate> predicates = new ArrayList<>();
-        Predicate predicate = cb.disjunction();
+        Predicate predicate = cb.conjunction();
         
         if (!StringUtils.isBlank(filtros.map(FiltrosMorador::getNome).orElse(""))) {
             predicate = cb.or(cb.like(cb.upper(morador.get("nome")), "%" + filtrosMorador.getNome().toUpperCase() + "%"), cb.like(cb.upper(moradorSecundario.get("nome")), "%" + filtrosMorador.getNome().toUpperCase()+ "%"));
